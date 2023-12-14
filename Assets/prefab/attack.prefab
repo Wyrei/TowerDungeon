@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 548108879669039362}
   - component: {fileID: 2500824633185207738}
   - component: {fileID: 4316937410713769356}
+  - component: {fileID: 2190968574800039052}
   m_Layer: 0
   m_Name: attack
   m_TagString: Untagged
@@ -110,4 +111,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bc3a1696f24ee543af7b5a9b21345a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Timer: 1
+  Timer: 3.47
+--- !u!54 &2190968574800039052
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5267810327306750029}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

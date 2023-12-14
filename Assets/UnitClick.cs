@@ -5,58 +5,71 @@ public class UnitClick : MonoBehaviour
 {
     private Camera mycam;
 
-    public GameObject groundmarker;
+    [SerializeField] private GameObject groundmarker;
     
-    public LayerMask clickable;
-    public LayerMask ground;
+    [SerializeField] private LayerMask clickable;
+    [SerializeField] private LayerMask ground;
     
-
-    private UnitAttack _attack;
+    
     void Start()
     {
         mycam = Camera.main;
     }
-    void Update()
+    private void Update()
     {
-        
         if (Input.GetMouseButtonDown(0))
         {
-            RaycastHit hit;
-            Ray ray = mycam.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, clickable))
-            {
-                if (Input.GetKey(KeyCode.LeftShift))
-                {
-                     unitselections.Instance.ShiftClickSelect(hit.collider.gameObject);
-                }
-                else
-                {
-                   unitselections.Instance.clickselect(hit.collider.gameObject); 
-                }
-            }
-            else 
-            {
-                if (!Input.GetKey(KeyCode.LeftShift))
-                {
-                    unitselections.Instance.DeselectAll();   
-                }
-            }
-            
+            HandleLeftMouseClick();
         }
 
         if (Input.GetMouseButtonDown(1))
         {
-            RaycastHit hit;
-            Ray ray = mycam.ScreenPointToRay((Input.mousePosition));
+            HandleRightMouseClick();
+        }
+    }
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground))
+    private void HandleLeftMouseClick()
+    {
+        RaycastHit hit;
+        Ray ray = mycam.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, clickable))
+        {
+            if (Input.GetKey(KeyCode.LeftShift))
             {
-                groundmarker.transform.position = hit.point;
-                groundmarker.SetActive(false);
-                groundmarker.SetActive(true);
+                unitselections.Instance.ShiftClickSelect(hit.collider.gameObject);
+            }
+            else
+            {
+                unitselections.Instance.clickselect(hit.collider.gameObject);
             }
         }
-        
-        
+        else
+        {
+            if (!Input.GetKey(KeyCode.LeftShift))
+            {
+                unitselections.Instance.DeselectAll();
+            }
+        }
+    }
+
+    private void HandleRightMouseClick()
+    {
+        RaycastHit hit;
+        Ray ray = mycam.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground))
+        {
+            Vector3 targetPosition = hit.point;
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                unitselections.Instance.DragSelectMove(targetPosition);
+            }
+            else
+            {
+                unitselections.Instance.MoveSelectedUnits(targetPosition);
+            }
+        }
     }
 }

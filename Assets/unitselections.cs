@@ -79,20 +79,43 @@ public class unitselections : MonoBehaviour
     {
         unitsSelected.Remove(unit);
         SetUnitSelectedState(unit, false);
-        
     }
 
     private void SetUnitSelectedState(GameObject unit, bool isSelected)
     {
-        playerBehever playerBehavior = unit.GetComponent<playerBehever>();
-        if (playerBehavior != null)
+        PlayerMovement playerMovement = unit.GetComponent<PlayerMovement>();
+        if (playerMovement != null)
         {
-            playerBehavior.setSelected(isSelected);
+            playerMovement.setSelected(isSelected);
         }
     }
 
     public void Deselect(GameObject unitToDeselect)
     {
         RemoveUnitFromSelection(unitToDeselect);
+    }
+
+    public void DragSelectMove(Vector3 targetPosition)
+    {
+        foreach (var unit in unitsSelected)
+        {
+            PlayerMovement playerMovement = unit.GetComponent<PlayerMovement>();
+            if (playerMovement != null)
+            {
+                playerMovement.MoveTo(targetPosition);
+            }
+        }
+    }
+
+    public void MoveSelectedUnits(Vector3 targetPosition)
+    {
+        foreach (var unit in unitsSelected)
+        {
+            PlayerMovement playerMovement = unit.GetComponent<PlayerMovement>();
+            if (playerMovement != null)
+            {
+                playerMovement.MoveTo(targetPosition);
+            }
+        }
     }
 }

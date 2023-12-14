@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.XR;
 
 public class playerBehever : MonoBehaviour
 {
@@ -13,8 +9,7 @@ public class playerBehever : MonoBehaviour
 
     public bool MoveToEnemy = false;
     public GameObject enemyTarget;
-    public float Range = 1.5f;
-    public bool attacks;
+    private bool attacks;
 
     public GameObject _gameObject;
     public float attackTimer;
@@ -23,6 +18,11 @@ public class playerBehever : MonoBehaviour
     public bool _isSelected;
     public bool isMoving = false;
     
+    public float ProjectileSpeed = 10f;
+    public float AttackRange = 1.5f;
+
+    [SerializeField] private float ForwardOffset;
+    
     [SerializeField] private AttackKindEnum state;
 
     /*private Dictionary<string, AttackKindEnum> ClassType = new Dictionary<string, AttackKindEnum>()
@@ -30,8 +30,7 @@ public class playerBehever : MonoBehaviour
             { "key1", AttackKindEnum.Melee },
             { "key2", AttackKindEnum.Magic }
         };*/
-        
-        //hello
+    
 
     public void setSelected(bool isSelected)
     {
@@ -51,6 +50,7 @@ public class playerBehever : MonoBehaviour
                 {
                     movingToDestination = true;
                     isMoving = true;
+                    MoveToEnemy = false;
                 }
             }
         }
@@ -71,7 +71,7 @@ public class playerBehever : MonoBehaviour
             }
             else if (MoveToEnemy)
             {
-                moveToEnemyPosition();
+                MoveToEnemyPosition();
             }  
         }
     }
@@ -122,85 +122,125 @@ public class playerBehever : MonoBehaviour
         }
     }
 
-    void moveToEnemyPosition()
+    void MoveToEnemyPosition()
     {
-        float distance = Vector3.Distance(transform.position, enemyTarget.transform.position);
-        if (distance > Range)
+        if (enemyTarget == null)
         {
-            transform.position = Vector3.MoveTowards(transform.position, destination, speed * Time.deltaTime);
-        }
-        else
-        {
-            MoveToEnemy = false;
+            StopMoving();
+            attacks = false;
+            return;
         }
 
-        Vector3 direction = enemyTarget.transform.position - transform.position;
-        direction.y = 0f; 
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), Time.deltaTime * 5f);
-        
-        if (distance <= Range)
+        MoveTowardTarget(enemyTarget.transform.position);
+
+        float distance = Vector3.Distance(transform.position, enemyTarget.transform.position);
+        if (distance <= AttackRange)
         {
+            StopMoving();
             attacks = true;
         }
-        else if (distance >= Range)
+        else
         {
             attacks = false;
         }
     }
+    void MoveTowardTarget(Vector3 targetPosition)
+    {
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+    }
+
+    void StopMoving()
+    {
+        MoveToEnemy = false;
+        isMoving = false;
+    }
+
+    void CheckEnemyInRange()
+    {
+        float distance = Vector3.Distance(transform.position, enemyTarget.transform.position);
+        if (distance > AttackRange)
+        {
+            attacks = false;
+        }
+    }
+
+    // Refactored projectile spawning for reuse
+    GameObject SpawnProjectile(Vector3 spawnPosition, Vector3 direction)
+    {
+        GameObject projectile = Instantiate(_gameObject, spawnPosition, Quaternion.identity);
+        projectile.GetComponent<Rigidbody>().AddForce(direction * ProjectileSpeed, ForceMode.Impulse);
+        return projectile;
+    }
     
     void attack()
     {
-        
-        switch (state)
+        if (enemyTarget != null)
         {
-            case AttackKindEnum.Melee:
-                MeleeAttack();
-                break;
+            float distance = Vector3.Distance(transform.position, enemyTarget.transform.position);
 
-            case AttackKindEnum.Magic:
-                MagicAttack();
-                break;
-            
-            case AttackKindEnum.Archer:
-                ArcherAttack();
-                break;
+            if (distance <= AttackRange)
+            {
+                switch (state)
+                {
+                    case AttackKindEnum.Melee:
+                        if (MeleeAttack())
+                        {
+                            CheckEnemyInRange();
+                        }
+                        break;
+
+                    case AttackKindEnum.Magic:
+                        if (MagicAttack())
+                        {
+                            CheckEnemyInRange();
+                        }
+                        break;
+                } 
+            }
+            else
+            {
+                MoveToEnemyPosition();
+            }
         }
+        else
+        {
+            attacks = false;
+            StopMoving();
+        }
+       
         
     }
-
-    void MeleeAttack()
+    bool MeleeAttack()
     {
         attackTimer -= Time.deltaTime;
         if (attackTimer <= 0)
         {
-            Vector3 spawnPosition = transform.position + transform.forward * 2f;
-        
+            Vector3 spawnPosition = transform.position + transform.forward * ForwardOffset;
             Instantiate(_gameObject, spawnPosition, Quaternion.identity);
             attackTimer = resetTimer;
+            return true;
         }
+        return false;
     }
 
-    void MagicAttack()
+    bool MagicAttack()
     {
         attackTimer -= Time.deltaTime;
         if (attackTimer <= 0)
         {
-            Vector3 spawnPosition = enemyTarget.transform.position;
-        
-            Instantiate(_gameObject, spawnPosition, Quaternion.identity);
+            Vector3 spawnPosition = transform.position + transform.forward * ForwardOffset;
+            Vector3 direction = (enemyTarget.transform.position - spawnPosition).normalized;
+            SpawnProjectile(spawnPosition, direction);
             attackTimer = resetTimer;
+            return true;
         }
+
+        return false;
     }
 
-    void ArcherAttack()
-    {
-        
-    }
-    
-    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, Range);
+        Gizmos.DrawWireSphere(transform.position, AttackRange);
     }
 }
