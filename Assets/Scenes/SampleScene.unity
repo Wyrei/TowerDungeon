@@ -506,7 +506,8 @@ GameObject:
   - component: {fileID: 906972867}
   - component: {fileID: 906972866}
   - component: {fileID: 906972865}
-  - component: {fileID: 906972864}
+  - component: {fileID: 906972871}
+  - component: {fileID: 906972870}
   - component: {fileID: 906972862}
   m_Layer: 8
   m_Name: unit 2
@@ -527,28 +528,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3f724f171353844f87d5a4bbd1886eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &906972864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 906972861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 169dcd0d3c8013643975f0df8abb5985, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movingToDestination: 0
-  speed: 5
-  MoveToEnemy: 0
-  enemyTarget: {fileID: 0}
-  stoppingdistance: 5.18
-  attackRange: 9.27
-  attacks: 0
-  _gameObject: {fileID: 5267810327306750029, guid: c6c5c923896f87c4dbccf181088bdee8, type: 3}
-  attackTimer: 2
-  resetTimer: 2
 --- !u!54 &906972865
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -644,6 +623,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &906972870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906972861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b874cf6c85965d4b8bfe82a8289c2fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ProjectilePrefab: {fileID: 5267810327306750029, guid: c6c5c923896f87c4dbccf181088bdee8, type: 3}
+  AttackTimer: 2
+  ResetTimer: 2
+  State: 2
+  ForwardOffset: 2
+  ProjectileSpeed: 10
+  AttackRange: 24.25
+--- !u!114 &906972871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906972861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d0ce7a35dc4341409880e6d7d4068bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Speed: 5
+  EnemyTarget: {fileID: 0}
 --- !u!1 &931522796
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,12 +694,15 @@ MonoBehaviour:
   speed: 5
   MoveToEnemy: 0
   enemyTarget: {fileID: 0}
-  stoppingdistance: 0.2
-  attackRange: 1.5
-  attacks: 0
   _gameObject: {fileID: 5267810327306750029, guid: c6c5c923896f87c4dbccf181088bdee8, type: 3}
   attackTimer: 3
   resetTimer: 3
+  _isSelected: 0
+  isMoving: 0
+  ProjectileSpeed: 10
+  AttackRange: 1.5
+  ForwardOffset: 0
+  state: 0
 --- !u!54 &931522798
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1016,12 +1031,15 @@ MonoBehaviour:
   speed: 5
   MoveToEnemy: 0
   enemyTarget: {fileID: 0}
-  stoppingdistance: 0.2
-  attackRange: 1.5
-  attacks: 0
   _gameObject: {fileID: 0}
   attackTimer: 0
   resetTimer: 0
+  _isSelected: 0
+  isMoving: 0
+  ProjectileSpeed: 10
+  AttackRange: 1.5
+  ForwardOffset: 0
+  state: 0
 --- !u!54 &1083889691
 Rigidbody:
   m_ObjectHideFlags: 0

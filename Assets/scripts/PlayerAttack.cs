@@ -12,7 +12,13 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float ForwardOffset;
     [SerializeField] private float ProjectileSpeed;
     [SerializeField] public float AttackRange;
+    private GameObject enemyTarget;
     
+
+    public void SetEnemyTarget(GameObject target)
+    {
+        enemyTarget = target;
+    }
     public void StartAttacking()
     {
         attacks = true;
