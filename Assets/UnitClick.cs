@@ -3,18 +3,18 @@ using UnityEngine;
 
 public class UnitClick : MonoBehaviour
 {
-    private Camera mycam;
+    private Camera myCam;
 
-    [SerializeField] private GameObject groundmarker;
-    
+    [SerializeField] private GameObject groundMarker;
+
     [SerializeField] private LayerMask clickable;
     [SerializeField] private LayerMask ground;
-    
-    
+
     void Start()
     {
-        mycam = Camera.main;
+        myCam = Camera.main;
     }
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -31,24 +31,24 @@ public class UnitClick : MonoBehaviour
     private void HandleLeftMouseClick()
     {
         RaycastHit hit;
-        Ray ray = mycam.ScreenPointToRay(Input.mousePosition);
+        Ray ray = myCam.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, clickable))
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                unitselections.Instance.ShiftClickSelect(hit.collider.gameObject);
+                UnitSelections.Instance.ShiftClickSelect(hit.collider.gameObject);
             }
             else
             {
-                unitselections.Instance.clickselect(hit.collider.gameObject);
+                UnitSelections.Instance.ClickSelect(hit.collider.gameObject);
             }
         }
         else
         {
             if (!Input.GetKey(KeyCode.LeftShift))
             {
-                unitselections.Instance.DeselectAll();
+                UnitSelections.Instance.DeselectAll();
             }
         }
     }
@@ -56,7 +56,7 @@ public class UnitClick : MonoBehaviour
     private void HandleRightMouseClick()
     {
         RaycastHit hit;
-        Ray ray = mycam.ScreenPointToRay(Input.mousePosition);
+        Ray ray = myCam.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, ground))
         {
@@ -64,11 +64,11 @@ public class UnitClick : MonoBehaviour
 
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                unitselections.Instance.DragSelectMove(targetPosition);
+                UnitSelections.Instance.DragSelectMove(targetPosition);
             }
             else
             {
-                unitselections.Instance.MoveSelectedUnits(targetPosition);
+                UnitSelections.Instance.MoveSelectedUnits(targetPosition);
             }
         }
     }

@@ -1,11 +1,10 @@
 using UnityEngine;
 
-public class playerBehever : MonoBehaviour
+public class PlayerBehavior : MonoBehaviour
 {
     public bool movingToDestination = false;
     private Vector3 destination;
     public float speed = 5f;
-    
 
     public bool MoveToEnemy = false;
     public GameObject enemyTarget;
@@ -17,25 +16,27 @@ public class playerBehever : MonoBehaviour
 
     public bool _isSelected;
     public bool isMoving = false;
-    
+
     public float ProjectileSpeed = 10f;
     public float AttackRange = 1.5f;
 
     [SerializeField] private float ForwardOffset;
-    
+
     [SerializeField] private AttackKindEnum state;
 
-    /*private Dictionary<string, AttackKindEnum> ClassType = new Dictionary<string, AttackKindEnum>()
-        {
-            { "key1", AttackKindEnum.Melee },
-            { "key2", AttackKindEnum.Magic }
-        };*/
-    
-
-    public void setSelected(bool isSelected)
+    public void SetSelected(bool isSelected)
     {
         _isSelected = isSelected;
     }
+
+    public void MoveTo(Vector3 position)
+    {
+        destination = position;
+        movingToDestination = true;
+        isMoving = true;
+        MoveToEnemy = false;
+    }
+
     void Update()
     {
         if (_isSelected)
@@ -54,7 +55,7 @@ public class playerBehever : MonoBehaviour
                 }
             }
         }
-        
+
         if (attacks)
         {
             attack();
@@ -72,7 +73,7 @@ public class playerBehever : MonoBehaviour
             else if (MoveToEnemy)
             {
                 MoveToEnemyPosition();
-            }  
+            }
         }
     }
 
@@ -100,6 +101,7 @@ public class playerBehever : MonoBehaviour
     {
         isMoving = true;
     }
+
     void MoveToDestination()
     {
         if (Vector3.Distance(transform.position, destination) < 0.1f)
@@ -111,6 +113,7 @@ public class playerBehever : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * speed);
         }
     }
+
     void GoToPlay()
     {
         if (enemyTarget != null)
@@ -144,6 +147,7 @@ public class playerBehever : MonoBehaviour
             attacks = false;
         }
     }
+
     void MoveTowardTarget(Vector3 targetPosition)
     {
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
@@ -164,14 +168,13 @@ public class playerBehever : MonoBehaviour
         }
     }
 
-    // Refactored projectile spawning for reuse
     GameObject SpawnProjectile(Vector3 spawnPosition, Vector3 direction)
     {
         GameObject projectile = Instantiate(_gameObject, spawnPosition, Quaternion.identity);
         projectile.GetComponent<Rigidbody>().AddForce(direction * ProjectileSpeed, ForceMode.Impulse);
         return projectile;
     }
-    
+
     void attack()
     {
         if (enemyTarget != null)
@@ -195,7 +198,7 @@ public class playerBehever : MonoBehaviour
                             CheckEnemyInRange();
                         }
                         break;
-                } 
+                }
             }
             else
             {
@@ -207,9 +210,8 @@ public class playerBehever : MonoBehaviour
             attacks = false;
             StopMoving();
         }
-       
-        
     }
+
     bool MeleeAttack()
     {
         attackTimer -= Time.deltaTime;

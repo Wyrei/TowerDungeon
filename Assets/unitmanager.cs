@@ -14,7 +14,7 @@ public class unitmanager : MonoBehaviour
         {
             unitlist.Add(unit);
 
-            unit.GetComponent<playerBehever>().enabled = true;
+            unit.GetComponent<PlayerBehavior>().enabled = true;
         }
     }
     public void Removeunut(GameObject unit)
@@ -23,7 +23,7 @@ public class unitmanager : MonoBehaviour
         {
             unitlist.Remove(unit);
 
-            unit.GetComponent<playerBehever>().enabled = false;
+            unit.GetComponent<PlayerBehavior>().enabled = false;
         }
     }
 }
