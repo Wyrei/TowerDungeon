@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,36 @@ public class invetorySysten : MonoBehaviour
     public UnityEvent OnItemAdded;
     public UnityEvent OnItemRemoved;
     public UnityEvent OnReset;
+
+    void Update()
+    {
+        InitializeItems();
+    }
+
+    void InitializeItems()
+    {
+        foreach (Item item in items)
+        {
+            SetItemSprite(item);
+        }
+    }
+
+    void SetItemSprite(Item item)
+    {
+        if (item.image != null && item.icon != null)
+        {
+            item.image.sprite = item.icon;
+        }
+        if (item.nameText != null)
+        {
+            item.nameText.text = item.name;
+        }
+
+        if (item.descriptionText != null)
+        {
+            item.descriptionText.text = item.description;
+        }
+    }
 
     public void AddItem(Item item)
     {
