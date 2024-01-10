@@ -22,22 +22,12 @@ public class UnitClick : MonoBehaviour
             Ray ray = mycam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, clickable))
             {
-                if (Input.GetKey(KeyCode.LeftShift))
+                if (hit.collider.CompareTag("Player"))
                 {
-                    unitselections.Instance.ShiftClickSelect(hit.collider.gameObject);
-                }
-                else
-                {
-                    unitselections.Instance.clickselect(hit.collider.gameObject);
-                    
-                    if (hit.collider.CompareTag("Target"))
+                    playerBehever PlayerBehavior = hit.collider.gameObject.GetComponent<playerBehever>();
+                    if (PlayerBehavior != null)
                     {
-                        
-                        PlayerAttack playerAttack = hit.collider.gameObject.GetComponent<PlayerAttack>();
-                        if (playerAttack != null)
-                        {
-                            playerAttack.SetEnemyTarget(hit.collider.gameObject);
-                        }
+                        PlayerBehavior.setSelected(true);
                     }
                 }
             }
