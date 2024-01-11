@@ -1,15 +1,15 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
+using Button = UnityEngine.UIElements.Button;
+using Quaternion = System.Numerics.Quaternion;
+using Vector3 = UnityEngine.Vector3;
+
 public class invetorySysten : MonoBehaviour
 {
     public List<Item> items = new List<Item>();
-    public UnityEvent OnItemAdded;
-    public UnityEvent OnItemRemoved;
-    public UnityEvent OnReset;
-
     void Update()
     {
         InitializeItems();
@@ -19,16 +19,17 @@ public class invetorySysten : MonoBehaviour
     {
         foreach (Item item in items)
         {
-            SetItemSprite(item);
+            SetItem(item);
         }
     }
 
-    void SetItemSprite(Item item)
+    void SetItem(Item item)
     {
         if (item.image != null && item.icon != null)
         {
             item.image.sprite = item.icon;
         }
+
         if (item.nameText != null)
         {
             item.nameText.text = item.name;
@@ -38,23 +39,6 @@ public class invetorySysten : MonoBehaviour
         {
             item.descriptionText.text = item.description;
         }
-    }
 
-    public void AddItem(Item item)
-    {
-        items.Add(item);
-        OnItemAdded.Invoke();
-    }
-
-    public void RemoveItem(Item item)
-    {
-        items.Remove(item);
-        OnItemRemoved.Invoke();
-    }
-
-    public void ResetInventory()
-    {
-        items.Clear();
-        OnReset.Invoke();
     }
 }

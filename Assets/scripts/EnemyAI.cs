@@ -97,13 +97,18 @@ public class EnemyAI : MonoBehaviour
         {
             navMeshAgent.SetDestination(player.position);
             navMeshAgent.speed = chaseSpeed;
+            
         }
         else
         {
+            stopmoving();
             navMeshAgent.ResetPath();
         }
     }
 
+    void stopmoving()
+    {
+    }
     void Search()
     {
     }
